@@ -2,11 +2,13 @@ import React from "react";
 import { Header } from "../../components/header";
 import { TaskList } from "../../components/task-list";
 
-export const TaskPage = () => {
+const TaskPage = () => {
     return (
         <>
-            {/* <Header/> */}
+            <Header/>
             <TaskList/>
         </>
     )
 }
+
+export default TaskPage;

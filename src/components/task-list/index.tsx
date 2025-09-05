@@ -5,35 +5,16 @@ import { TaskAdd } from "../task-add";
 import { RenderTableRow } from "./common";
 import { serviceFetchTaskList } from "../../external/services";
 
-const leads = [
-  { 
-    taskName: "John Doe",
-    taskId: "T-001",
-    taskDetails: "+1 8581234567", 
-    taskDescription: "qa.im.info@example.cn", 
-    taskStatus: "Recycled",
-    taskScheduled: "2025-08-30 10:00 AM" 
-  },
-  { 
-    taskName: "Daniel Wilson",
-    taskId: "T-002",
-    taskDetails: "+1 5034567890", 
-    taskDescription: "info@futurelabs.org", 
-    taskStatus: "New",
-    taskScheduled: "2025-09-01 11:00 AM" 
-  },
-];
-
 export const TaskList : React.FC<any> = () => {
   
-  const [data, setData] = useState(leads);
+  const [data, setData] = useState([]);
   const getData = async () => {
     const response = await serviceFetchTaskList();
-    setData(response);
+    setData(response?.taskData);
   }
 
   useEffect(() => {
-    // getData();
+    getData();
   }, []);
 
   return (

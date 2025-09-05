@@ -9,12 +9,13 @@ import {
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import type { SelectChangeEvent } from "@mui/material";
+import { serviceCreateNewTask, serviceFetchCommonTaskDetails } from "../../external/services";
 
 interface TaskState {
   taskName: string;
   taskDescription: string;
-  taskType: string;
-  taskScheduled: string;
+  taskDetail: string;
+  taskScheduledFor: string;
 }
 
 export const TaskCreate: React.FC = () => {
@@ -26,22 +27,21 @@ export const TaskCreate: React.FC = () => {
   const [state, setState] = useState<TaskState>({
     taskName: "",
     taskDescription: "",
-    taskType: "",
-    taskScheduled: "",
+    taskDetail: "",
+    taskScheduledFor: "",
   });
 
-  useEffect(() => {
-    // Initialize common options
-    // serviceFetchCommonTaskDetails
+  const getCommonTaskDetails = async () => {
+    const response = await serviceFetchCommonTaskDetails();
     setCommonTaskData({
-      typeOptions: ["User Defined", "Report Generation", "Subscriptions", "Clean DB", "Clean Caches"],
-      frequencyOptions: ["Every Day", "Every Month", "Every Year", "Custom"],
-    });
-  }, []);
-
+      typeOptions : response?.typeOptions,
+      frequencyOptions : response?.frequencyOptions
+    })
+  };
+  
   useEffect(() => {
-    
-  }, [state.taskType]);
+    getCommonTaskDetails();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -56,43 +56,39 @@ export const TaskCreate: React.FC = () => {
   };
 
   const handleAdd = () => {
-    // if (state.taskName.trim() !== "") {
-    //   console.log("Task Added:", state);
-    //   // Reset form
-    //   setState({
-    //     taskName: "",
-    //     taskDescription: "",
-    //     taskType: "",
-    //     taskScheduled: "",
-    //   });
-    // }
+    serviceCreateNewTask(state);
   };
+
+  const renderWithFormWrapper = (jsx : React.ReactElement) => {
+    return (
+      <FormControl fullWidth sx={{ mt: 2, mb : 2 }}>
+        {jsx}
+      </FormControl>
+    )
+  }
 
   return (
     <>
-      <TextField
-        autoFocus
-        margin="dense"
-        label="Task Name"
-        fullWidth
-        name="taskName"
-        value={state.taskName}
-        onChange={handleChange}
-      />
-      <TextField
-        margin="dense"
-        label="Task Description"
-        fullWidth
-        name="taskDescription"
-        value={state.taskDescription}
-        onChange={handleChange}
-      />
-
-      <FormControl fullWidth margin="dense">
+        {renderWithFormWrapper(<TextField
+          autoFocus
+          label="Task Name"
+          fullWidth
+          name="taskName"
+          value={state.taskName}
+          onChange={handleChange}
+        />)}
+        {renderWithFormWrapper(<TextField
+          label="Task Description"
+          fullWidth
+          name="taskDescription"
+          value={state.taskDescription}
+          onChange={handleChange}
+        />)}
+        {renderWithFormWrapper(<>
         <InputLabel>Task Type</InputLabel>
         <Select
-          value={state.taskType}
-          name="taskType"
+          value={state.taskDetail}
+          name="taskDetail"
           onChange={handleSelectChange}
           IconComponent={ArrowDropDownIcon}
         >
@@ -102,13 +98,12 @@ export const TaskCreate: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
-
-      <FormControl fullWidth margin="dense">
+        </>)}
+        {renderWithFormWrapper(<>
         <InputLabel>Task Frequency</InputLabel>
         <Select
-          value={state.taskScheduled}
-          name="taskScheduled"
+          value={state.taskScheduledFor}
+          name="taskScheduledFor"
           onChange={handleSelectChange}
           IconComponent={ArrowDropDownIcon}
         >
@@ -118,8 +113,7 @@ export const TaskCreate: React.FC = () => {
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
-
+        </>)}
       <Button onClick={handleAdd} variant="contained" color="primary">
         Add
       </Button>

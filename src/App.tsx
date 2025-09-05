@@ -1,9 +1,9 @@
 import './App.css';
-import { TaskPage } from './screens/task-page/index';
+import { AppRoutes } from './app-routes';
 function App() {
   return (
     <div className = "App">
-      <TaskPage/>
+      <AppRoutes/>
     </div>
   );
 }

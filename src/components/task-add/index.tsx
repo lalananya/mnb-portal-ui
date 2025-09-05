@@ -26,7 +26,6 @@ export const TaskAdd: React.FC<TaskAddProps> = ({ }) => {
         <DialogContent>
           <TaskCreate/>
         </DialogContent>
-
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
         </DialogActions>
