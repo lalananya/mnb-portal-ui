@@ -24,7 +24,7 @@ export const serviceCreateNewTask = async ( data : any) : Promise<any> => {
 
 
 export const serviceFetchCommonTaskDetails = async () : Promise<any> => {
-try {
+    try {
         const response = await sendGetRequest({
             endpoint :  `public/get-common-task-details`
         });
@@ -34,11 +34,11 @@ try {
     }
 }
 
-// export const serviceFetchDetailsOnType = async (type : string) : Promise<any> => {
-//     try {
-//         const response = await fetch(`${host}tasks/get-common-details/type?selected=${type}`);
-//         return response;
-//     } catch(error) {
-//         console.error("Error fetching common details:", error);
-//     }
-// }
+export const serviceFetchQueryData = async (query : string) : Promise<any> => {
+    try {
+        const response = await fetch(`https://api.example.com/search?q=${query}`);
+        return response;
+    } catch(error) {
+        console.error("Error fetching common details:", error);
+    }
+}
